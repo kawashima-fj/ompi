@@ -471,10 +471,11 @@ opal_init_util(int* pargc, char*** pargv)
     char *error = NULL;
     OPAL_TIMING_ENV_INIT(otmng);
 
-    if( ++opal_util_initialized != 1 ) {
-        if( opal_util_initialized < 1 ) {
+    if( opal_util_initialized != 0 ) {
+        if( opal_util_initialized < 0 ) {
             return OPAL_ERROR;
         }
+        ++opal_util_initialized;
         return OPAL_SUCCESS;
     }
 
@@ -616,6 +617,8 @@ opal_init_util(int* pargc, char*** pargv)
 
     OPAL_TIMING_ENV_NEXT(otmng, "opal_if_init");
 
+    ++opal_util_initialized;
+
     return OPAL_SUCCESS;
 }
 
@@ -636,10 +639,11 @@ opal_init(int* pargc, char*** pargv)
 {
     int ret;
 
-    if( ++opal_initialized != 1 ) {
-        if( opal_initialized < 1 ) {
+    if( opal_initialized != 0 ) {
+        if( opal_initialized < 0 ) {
             return OPAL_ERROR;
         }
+        ++opal_initialized;
         return OPAL_SUCCESS;
     }
 
@@ -693,6 +697,8 @@ opal_init(int* pargc, char*** pargv)
     if (OPAL_SUCCESS != (ret = opal_compress_base_select())) {
         return opal_init_error ("opal_compress_base_select", ret);
     }
+
+    ++opal_initialized;
 
     return OPAL_SUCCESS;
 }
